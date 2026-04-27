@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProofPix — Digital Ownership & Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAV BAR
+  ═══════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="logo" onclick="showPage('landing')">
+      <span class="logo-icon">◈</span>
+      ProofPix
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#" onclick="showPage('verify')" class="nav-link">Verify</a>
+      <a href="#" onclick="handleDashboardNav()" class="nav-link" id="dashboardNavLink" style="display:none">Dashboard</a>
+      <a href="#" onclick="showPage('upload')" class="btn-outline" id="uploadNavBtn" style="display:none">Upload</a>
+      <a href="#" onclick="showPage('login')" class="btn-primary" id="loginNavBtn">Login</a>
+      <a href="#" onclick="logout()" class="btn-outline" id="logoutNavBtn" style="display:none">Logout</a>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger">☰</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: LANDING
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-landing" class="page active">
+    <section class="hero">
+      <div class="hero-bg">
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Digital Ownership Protocol
+        </div>
+        <h1 class="hero-title">
+          Prove. Protect.<br>
+          <span class="gradient-text">Verify.</span>
+        </h1>
+        <p class="hero-sub">
+          ProofPix turns your media into tamper-evident, cryptographically signed assets. 
+          Upload once — own it forever.
+        </p>
+        <div class="hero-cta">
+          <button class="btn-primary large" onclick="showPage('signup')">Start Protecting →</button>
+          <button class="btn-ghost large" onclick="showPage('verify')">Verify a File</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">SHA-256</span><span class="stat-label">Fingerprinting</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><span class="stat-num">JWT</span><span class="stat-label">Secure Auth</span></div>
+          <div class="stat-divider"></div>
+          <div class="stat"><span class="stat-num">50MB</span><span class="stat-label">Max File Size</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="proof-card float-anim">
+          <div class="proof-card-header">
+            <span class="proof-dot green"></span>
+            <span class="proof-dot yellow"></span>
+            <span class="proof-dot red"></span>
+            <span class="proof-title">proof.json</span>
+          </div>
+          <div class="proof-card-body">
+            <div class="proof-line"><span class="key">owner</span><span class="val">"Alex Johnson"</span></div>
+            <div class="proof-line"><span class="key">status</span><span class="val verified">VERIFIED ✓</span></div>
+            <div class="proof-line"><span class="key">hash</span></div>
+            <div class="proof-hash">a3f8c2e1...d94b7f02</div>
+            <div class="proof-line"><span class="key">timestamp</span><span class="val">"2025-01-15"</span></div>
+            <div class="proof-line"><span class="key">watermark</span><span class="val">applied ◈</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">How ProofPix Works</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">↑</div>
+            <h3>Upload</h3>
+            <p>Upload your image or video. ProofPix instantly applies a digital watermark with your identity.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">#</div>
+            <h3>Fingerprint</h3>
+            <p>A SHA-256 cryptographic hash is generated — a unique fingerprint of your protected content.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⟳</div>
+            <h3>Share</h3>
+            <p>Get a secure verification link. Share it anywhere — direct file URLs stay hidden.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">✓</div>
+            <h3>Verify</h3>
+            <p>Anyone can upload a file to check if it's registered. Ownership is proved instantly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: LOGIN
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-login" class="page">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">◈ ProofPix</div>
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-sub">Sign in to your account</p>
+        <div id="loginAlert" class="alert" style="display:none"></div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" />
+        </div>
+        <button class="btn-primary full" onclick="login()" id="loginBtn">Sign In</button>
+        <p class="auth-switch">No account? <a href="#" onclick="showPage('signup')">Sign up</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: SIGNUP
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-signup" class="page">
+    <div class="auth-container">
+      <div class="auth-card">
+        <div class="auth-logo">◈ ProofPix</div>
+        <h2 class="auth-title">Create account</h2>
+        <p class="auth-sub">Start protecting your media</p>
+        <div id="signupAlert" class="alert" style="display:none"></div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" class="form-input" placeholder="Alex Johnson" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signupEmail" class="form-input" placeholder="you@example.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" class="form-input" placeholder="min. 6 characters" />
+        </div>
+        <button class="btn-primary full" onclick="signup()" id="signupBtn">Create Account</button>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="showPage('login')">Log in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: DASHBOARD
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-dashboard" class="page">
+    <div class="page-container">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Your Files</h1>
+          <p class="page-sub">All your protected media assets</p>
+        </div>
+        <button class="btn-primary" onclick="showPage('upload')">+ Upload New</button>
+      </div>
+
+      <div id="dashboardLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your files…</p>
+      </div>
+
+      <div id="dashboardEmpty" class="empty-state" style="display:none">
+        <div class="empty-icon">◈</div>
+        <h3>No files yet</h3>
+        <p>Upload your first file to get started.</p>
+        <button class="btn-primary" onclick="showPage('upload')">Upload Now</button>
+      </div>
+
+      <div id="filesGrid" class="files-grid" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: UPLOAD
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-upload" class="page">
+    <div class="page-container narrow">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Upload & Protect</h1>
+          <p class="page-sub">Your file will be watermarked and fingerprinted automatically</p>
+        </div>
+      </div>
+
+      <div id="uploadResult" style="display:none"></div>
+
+      <div class="upload-card" id="uploadCard">
+        <div class="drop-zone" id="dropZone"
+          ondragover="handleDragOver(event)"
+          ondragleave="handleDragLeave(event)"
+          ondrop="handleDrop(event)"
+          onclick="document.getElementById('fileInput').click()">
+          <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)" style="display:none" />
+          <div class="drop-icon">↑</div>
+          <p class="drop-title">Drop your file here</p>
+          <p class="drop-sub">or click to browse</p>
+          <p class="drop-hint">Images & Videos up to 50MB</p>
+        </div>
+
+        <div id="filePreview" class="file-preview" style="display:none">
+          <div class="preview-info">
+            <div class="preview-icon" id="previewIcon">📷</div>
+            <div>
+              <div class="preview-name" id="previewName"></div>
+              <div class="preview-size" id="previewSize"></div>
+            </div>
+            <button class="preview-remove" onclick="clearFile()">✕</button>
+          </div>
+        </div>
+
+        <div id="uploadProgress" style="display:none" class="progress-section">
+          <div class="progress-steps">
+            <div class="step active" id="step1"><span>1</span> Uploading</div>
+            <div class="step" id="step2"><span>2</span> Watermarking</div>
+            <div class="step" id="step3"><span>3</span> Fingerprinting</div>
+            <div class="step" id="step4"><span>4</span> Securing</div>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <button class="btn-primary full upload-btn" id="uploadBtn" onclick="uploadFile()" disabled>
+          Protect This File →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: VIEW (Secure content view)
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-view" class="page">
+    <div class="page-container narrow">
+      <div id="viewLoading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Verifying content…</p>
+      </div>
+      <div id="viewContent" style="display:none">
+        <div class="verified-badge-large">
+          <span class="verified-checkmark">✓</span>
+          <span>Verified Content</span>
+        </div>
+        <div class="view-media-wrap">
+          <img id="viewImage" class="view-media" style="display:none" alt="Protected content" />
+          <video id="viewVideo" class="view-media" controls style="display:none"></video>
+        </div>
+        <div class="ownership-card">
+          <h3 class="ownership-title">Ownership Certificate</h3>
+          <div class="ownership-row">
+            <span class="ownership-label">Owner</span>
+            <span class="ownership-value" id="viewOwner"></span>
+          </div>
+          <div class="ownership-row">
+            <span class="ownership-label">Registered</span>
+            <span class="ownership-value" id="viewDate"></span>
+          </div>
+          <div class="ownership-row">
+            <span class="ownership-label">File</span>
+            <span class="ownership-value" id="viewFilename"></span>
+          </div>
+          <div class="ownership-row">
+            <span class="ownership-label">SHA-256</span>
+            <span class="ownership-value hash-val" id="viewHash"></span>
+          </div>
+        </div>
+      </div>
+      <div id="viewError" style="display:none" class="error-state">
+        <div class="error-icon">✕</div>
+        <h3>Content Not Found</h3>
+        <p>This content is not registered in ProofPix.</p>
+        <button class="btn-primary" onclick="showPage('landing')">Go Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE: VERIFY
+  ═══════════════════════════════════════════════════════ -->
+  <div id="page-verify" class="page">
+    <div class="page-container narrow">
+      <div class="page-header centered">
+        <h1 class="page-title">Verify Ownership</h1>
+        <p class="page-sub">Upload any file to check if it's registered and who owns it</p>
+      </div>
+
+      <div id="verifyResult" style="display:none"></div>
+
+      <div class="upload-card">
+        <div class="drop-zone" id="verifyDropZone"
+          ondragover="handleDragOver(event)"
+          ondragleave="handleDragLeave(event)"
+          ondrop="handleVerifyDrop(event)"
+          onclick="document.getElementById('verifyInput').click()">
+          <input type="file" id="verifyInput" accept="image/*,video/*" onchange="handleVerifySelect(event)" style="display:none" />
+          <div class="drop-icon">?</div>
+          <p class="drop-title">Drop file to verify</p>
+          <p class="drop-sub">or click to browse</p>
+        </div>
+
+        <div id="verifyPreview" class="file-preview" style="display:none">
+          <div class="preview-info">
+            <div class="preview-icon">🔍</div>
+            <div>
+              <div class="preview-name" id="verifyFileName"></div>
+              <div class="preview-size" id="verifyFileSize"></div>
+            </div>
+            <button class="preview-remove" onclick="clearVerifyFile()">✕</button>
+          </div>
+        </div>
+
+        <button class="btn-primary full upload-btn" id="verifyBtn" onclick="verifyFile()" disabled>
+          Check Ownership →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       TOAST NOTIFICATION
+  ═══════════════════════════════════════════════════════ -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MODAL: Share Link
+  ═══════════════════════════════════════════════════════ -->
+  <div id="modal" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3 class="modal-title">Share Link</h3>
+      <p class="modal-sub">Anyone with this link can view and verify this content.</p>
+      <div class="share-link-wrap">
+        <input type="text" id="shareLinkInput" class="share-link-input" readonly />
+        <button class="btn-primary" onclick="copyShareLink()">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "proofpix-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cd proofpix/backend && npm start",
+    "dev": "cd proofpix/backend && npm run dev",
+    "install-backend": "cd proofpix/backend && npm install"
+  }
+}
